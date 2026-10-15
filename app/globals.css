@@ -1,0 +1,116 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Theme tokens are space-separated RGB triplets so Tailwind can apply alpha modifiers. */
+:root,
+:root[data-theme="dark"] {
+  --c-ws: 15 23 42;
+  --c-surface: 24 34 56;
+  --c-surface2: 34 47 76;
+  --c-line: 48 62 92;
+  --c-fg: 226 232 240;
+  --c-muted: 148 163 184;
+  --c-accent: 59 130 246;
+  --c-accent-fg: 255 255 255;
+  --c-danger: 248 113 113;
+  --c-warn: 251 191 36;
+  color-scheme: dark;
+}
+
+:root[data-theme="light"] {
+  --c-ws: 226 232 240;
+  --c-surface: 255 255 255;
+  --c-surface2: 241 245 249;
+  --c-line: 203 213 225;
+  --c-fg: 15 23 42;
+  --c-muted: 100 116 139;
+  --c-accent: 37 99 235;
+  --c-accent-fg: 255 255 255;
+  --c-danger: 220 38 38;
+  --c-warn: 180 83 9;
+  color-scheme: light;
+}
+
+html {
+  scroll-behavior: smooth;
+  height: 100%;
+}
+
+body {
+  min-height: 100%;
+  font-family: 'Plus Jakarta Sans', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  color: #11172B;
+  background-color: #FFFFFF;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Atmospheric Pastel Gradient */
+.bg-pastel-gradient {
+  background: radial-gradient(130% 90% at 50% 0%, #FBE8F7 0%, #E8DDFD 38%, #DCEBFF 72%, #FFFFFF 100%);
+}
+
+.bg-hero-glow {
+  background:
+    radial-gradient(ellipse 65% 50% at 20% 25%, rgba(251, 232, 247, 0.85) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 45% at 80% 20%, rgba(232, 221, 253, 0.8) 0%, transparent 70%),
+    radial-gradient(ellipse 80% 60% at 50% 65%, rgba(220, 235, 255, 0.75) 0%, rgba(255, 255, 255, 0.95) 100%);
+}
+
+.bg-cta-gradient {
+  background: radial-gradient(120% 100% at 50% 10%, #F4EFFE 0%, #E8DDFD 30%, #DCEBFF 68%, #FFFFFF 100%);
+}
+
+.bg-dot-pattern {
+  background-image: radial-gradient(rgba(17, 23, 43, 0.12) 1.25px, transparent 1.25px);
+  background-size: 24px 24px;
+}
+
+:focus-visible {
+  outline: 2px solid rgb(var(--c-accent));
+  outline-offset: 2px;
+}
+
+input:focus-visible {
+  outline-offset: 0;
+}
+
+.scroll-thin {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(var(--c-line)) transparent;
+}
+.scroll-thin::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+.scroll-thin::-webkit-scrollbar-thumb {
+  background: rgb(var(--c-line));
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+.scroll-thin::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+@keyframes rwp-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.rwp-spinner {
+  animation: rwp-spin 0.8s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
