@@ -24,6 +24,9 @@ export const metadata: Metadata = {
     url: "https://responsively.online",
     type: "website",
   },
+  verification: {
+    google: "8BwvGG6Wz5cHFbrDM7mHnhbq9H5tQfN9Vjecfu-DvNo",
+  },
 };
 
 export default function LandingPage() {

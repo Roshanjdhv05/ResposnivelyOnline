@@ -55,6 +55,9 @@ export const metadata: Metadata = {
     shortcut: ["/logo.png"],
     apple: [{ url: "/logo.png", type: "image/png" }],
   },
+  verification: {
+    google: "8BwvGG6Wz5cHFbrDM7mHnhbq9H5tQfN9Vjecfu-DvNo",
+  },
 };
 
 export const viewport: Viewport = {
@@ -105,6 +108,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        <meta
+          name="google-site-verification"
+          content="8BwvGG6Wz5cHFbrDM7mHnhbq9H5tQfN9Vjecfu-DvNo"
+        />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <script
