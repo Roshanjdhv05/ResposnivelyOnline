@@ -11,6 +11,7 @@ import {
   defaultDevices,
   isRotatable,
   newUid,
+  toggleFoldState,
 } from "@/lib/devices";
 import { defaultState, loadState, saveState } from "@/lib/storage";
 import type {
@@ -24,10 +25,12 @@ import type {
 type Action =
   | { type: "hydrate"; state: WorkspaceState }
   | { type: "add"; device: DeviceInstance }
+  | { type: "addMultiple"; devices: DeviceInstance[] }
   | { type: "remove"; uid: string }
   | { type: "switch"; uid: string; preset: DevicePreset }
   | { type: "customize"; uid: string; name: string; width: number; height: number }
   | { type: "rotate"; uid: string }
+  | { type: "toggleFold"; uid: string }
   | { type: "zoom"; uid: string; zoom: ZoomMode }
   | { type: "fitAll" }
   | { type: "moveDevice"; uid: string; position: { x: number; y: number } }
@@ -73,6 +76,23 @@ function reducer(state: WorkspaceState, action: Action): WorkspaceState {
       };
       return { ...state, devices: [...state.devices, device] };
     }
+    case "addMultiple": {
+      const last = state.devices[state.devices.length - 1];
+      let curX = last?.position
+        ? last.position.x + (last.rotated ? last.height : last.width) + 60
+        : 80;
+      const curY = last?.position ? last.position.y : 100;
+
+      const newDevices = action.devices.map((device) => {
+        const d = {
+          ...device,
+          position: device.position ?? { x: curX, y: curY },
+        };
+        curX += (d.rotated ? d.height : d.width) + 60;
+        return d;
+      });
+      return { ...state, devices: [...state.devices, ...newDevices] };
+    }
     case "remove":
       return { ...state, devices: state.devices.filter((d) => d.uid !== action.uid) };
     case "switch":
@@ -83,6 +103,9 @@ function reducer(state: WorkspaceState, action: Action): WorkspaceState {
         category: action.preset.category,
         width: action.preset.width,
         height: action.preset.height,
+        modelId: action.preset.modelId,
+        foldState: action.preset.foldState,
+        dpr: action.preset.dpr,
         rotated: isRotatable(action.preset.category) ? d.rotated : false,
       }));
     case "customize":
@@ -99,6 +122,8 @@ function reducer(state: WorkspaceState, action: Action): WorkspaceState {
       return updateDevice(state, action.uid, (d) =>
         isRotatable(d.category) ? { ...d, rotated: !d.rotated } : d,
       );
+    case "toggleFold":
+      return updateDevice(state, action.uid, (d) => toggleFoldState(d));
     case "zoom":
       return updateDevice(state, action.uid, (d) => ({ ...d, zoom: action.zoom }));
     case "fitAll":
@@ -153,6 +178,14 @@ export function useWorkspace() {
     (preset: DevicePreset) => dispatch({ type: "add", device: createDevice(preset, newUid()) }),
     [],
   );
+  const addMultiplePresets = useCallback(
+    (presets: DevicePreset[]) =>
+      dispatch({
+        type: "addMultiple",
+        devices: presets.map((p) => createDevice(p, newUid())),
+      }),
+    [],
+  );
   const addCustom = useCallback(
     (name: string, width: number, height: number) =>
       dispatch({ type: "add", device: createCustomDevice(name, width, height, newUid()) }),
@@ -169,6 +202,7 @@ export function useWorkspace() {
     [],
   );
   const rotate = useCallback((uid: string) => dispatch({ type: "rotate", uid }), []);
+  const toggleFold = useCallback((uid: string) => dispatch({ type: "toggleFold", uid }), []);
   const setZoom = useCallback(
     (uid: string, zoom: ZoomMode) => dispatch({ type: "zoom", uid, zoom }),
     [],
@@ -196,11 +230,13 @@ export function useWorkspace() {
       state,
       hydrated,
       addPreset,
+      addMultiplePresets,
       addCustom,
       remove,
       switchPreset,
       customize,
       rotate,
+      toggleFold,
       setZoom,
       fitAll,
       moveDevice,
@@ -213,11 +249,13 @@ export function useWorkspace() {
       state,
       hydrated,
       addPreset,
+      addMultiplePresets,
       addCustom,
       remove,
       switchPreset,
       customize,
       rotate,
+      toggleFold,
       setZoom,
       fitAll,
       moveDevice,

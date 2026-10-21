@@ -12,6 +12,14 @@ export interface DevicePreset {
   width: number;
   /** Viewport height in CSS pixels in the device's original orientation. */
   height: number;
+  /** Optional smartphone database model ID */
+  modelId?: string;
+  /** For foldable devices: whether this preset is for the cover screen or inner unfolded screen */
+  foldState?: "cover" | "inner";
+  /** Device pixel ratio when available */
+  dpr?: number;
+  /** Display details summary (e.g. '6.8" 1440x3120 (120Hz)') */
+  specSummary?: string;
 }
 
 export interface DeviceInstance {
@@ -25,6 +33,12 @@ export interface DeviceInstance {
   rotated: boolean;
   zoom: ZoomMode;
   position?: { x: number; y: number };
+  /** Optional smartphone database model ID */
+  modelId?: string;
+  /** Current foldable screen state */
+  foldState?: "cover" | "inner";
+  /** Device pixel ratio when available */
+  dpr?: number;
 }
 
 export interface WorkspacePrefs {

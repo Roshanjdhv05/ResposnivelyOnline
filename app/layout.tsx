@@ -51,9 +51,18 @@ export const metadata: Metadata = {
     images: ["/logo.png"],
   },
   icons: {
-    icon: [{ url: "/logo.png", type: "image/png" }],
-    shortcut: ["/logo.png"],
-    apple: [{ url: "/logo.png", type: "image/png" }],
+    icon: [
+      { url: "/favicon-16.png", sizes: "16x16", type: "image/png" },
+      { url: "/favicon-32.png", sizes: "32x32", type: "image/png" },
+      { url: "/favicon-48.png", sizes: "48x48", type: "image/png" },
+      { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
+      { url: "/icon-512.png", sizes: "512x512", type: "image/png" },
+    ],
+    shortcut: [{ url: "/favicon-32.png", type: "image/png" }],
+    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }],
+    other: [
+      { rel: "mask-icon", url: "/logo.png" },
+    ],
   },
   verification: {
     google: "8BwvGG6Wz5cHFbrDM7mHnhbq9H5tQfN9Vjecfu-DvNo",
@@ -112,6 +121,15 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           name="google-site-verification"
           content="8BwvGG6Wz5cHFbrDM7mHnhbq9H5tQfN9Vjecfu-DvNo"
         />
+        {/* Explicit favicon links — helps Google Search & browsers pick up the real icon */}
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+        <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+        <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png" />
+        <link rel="icon" type="image/png" sizes="512x512" href="/icon-512.png" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+        <link rel="shortcut icon" href="/favicon-32.png" />
+        <link rel="manifest" href="/site.webmanifest" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <script

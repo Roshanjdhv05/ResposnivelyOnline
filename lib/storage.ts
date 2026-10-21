@@ -60,13 +60,16 @@ function sanitizeDevice(value: unknown): DeviceInstance | null {
   return {
     uid: d.uid,
     presetId: d.presetId,
-    name: d.name.slice(0, 60),
+    name: d.name.slice(0, 100),
     category: d.category as DeviceCategory,
     width: Math.round(d.width),
     height: Math.round(d.height),
     rotated: d.rotated === true,
     zoom: isZoom(d.zoom) ? d.zoom : "fit",
     position,
+    modelId: typeof d.modelId === "string" ? d.modelId : undefined,
+    foldState: d.foldState === "cover" || d.foldState === "inner" ? d.foldState : undefined,
+    dpr: typeof d.dpr === "number" ? d.dpr : undefined,
   };
 }
 

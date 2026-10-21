@@ -5,6 +5,7 @@ import {
   ChevronDown,
   Expand,
   ExternalLink,
+  FoldVertical,
   GripVertical,
   Link as LinkIcon,
   Link2Off,
@@ -14,7 +15,7 @@ import {
   X,
 } from "lucide-react";
 import { cn } from "@/lib/cn";
-import { CATEGORY_LABELS } from "@/lib/devices";
+import { CATEGORY_LABELS, isFoldable } from "@/lib/devices";
 import {
   TOOLBAR_HEIGHT,
   ZOOM_PRESETS,
@@ -44,6 +45,7 @@ interface DeviceToolbarProps {
   onToggleSyncExclude?: () => void;
   onDragStart?: (e: React.PointerEvent) => void;
   onRotate: () => void;
+  onToggleFold?: () => void;
   onReload: () => void;
   onZoom: (zoom: ZoomMode) => void;
   onFullscreen: () => void;
@@ -70,6 +72,7 @@ export default function DeviceToolbar({
   onToggleSyncExclude,
   onDragStart,
   onRotate,
+  onToggleFold,
   onReload,
   onZoom,
   onFullscreen,
@@ -82,6 +85,7 @@ export default function DeviceToolbar({
   const iconSize = compact ? 14 : 15;
   const btnSize = compact ? "sm" : "md";
   const orientation = orientationOf(device);
+  const foldable = isFoldable(device);
 
   return (
     <div
@@ -121,9 +125,23 @@ export default function DeviceToolbar({
             <ChevronDown size={12} className="shrink-0 text-muted group-hover:text-fg" aria-hidden />
           </DevicePresetSelector>
         </div>
+
+        {/* Foldable state badge */}
+        {foldable && onToggleFold && (
+          <button
+            type="button"
+            onClick={onToggleFold}
+            title={device.foldState === "inner" ? "Switch to Cover Screen (Folded)" : "Switch to Inner Screen (Unfolded)"}
+            className="shrink-0 flex items-center gap-1 rounded bg-indigo-500/15 px-1.5 py-0.5 text-[10px] font-semibold text-indigo-400 hover:bg-indigo-500/25 transition-colors"
+          >
+            <FoldVertical size={10} />
+            <span>{device.foldState === "inner" ? "Unfolded" : "Folded"}</span>
+          </button>
+        )}
+
         <span
           className="shrink-0 text-2xs tabular-nums text-muted"
-          title={`${CATEGORY_LABELS[device.category]} · ${orientation}`}
+          title={`${CATEGORY_LABELS[device.category]} · ${orientation}${device.dpr ? ` · @${device.dpr}x DPR` : ""}`}
         >
           {describeSize(size)}
         </span>
@@ -188,6 +206,16 @@ export default function DeviceToolbar({
                 transition: "transform 300ms ease-out",
               }}
             />
+          </IconButton>
+        ) : null}
+
+        {foldable && onToggleFold ? (
+          <IconButton
+            size={btnSize}
+            label={device.foldState === "inner" ? "Switch to Cover Screen (Folded)" : "Switch to Inner Screen (Unfolded)"}
+            onClick={onToggleFold}
+          >
+            <FoldVertical size={iconSize} className="text-indigo-400" aria-hidden />
           </IconButton>
         ) : null}
 

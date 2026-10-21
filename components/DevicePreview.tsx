@@ -37,6 +37,7 @@ interface DevicePreviewProps {
   /** Shared scroll-sync bus fallback */
   syncScrollBus?: SyncScrollBus;
   onRotate: (uid: string) => void;
+  onToggleFold?: (uid: string) => void;
   onZoom: (uid: string, zoom: ZoomMode) => void;
   onRemove: (uid: string) => void;
   onSwitchPreset: (uid: string, preset: DevicePreset) => void;
@@ -79,6 +80,7 @@ export default function DevicePreview({
   onScrollBy,
   syncScrollBus,
   onRotate,
+  onToggleFold,
   onZoom,
   onRemove,
   onSwitchPreset,
@@ -232,6 +234,7 @@ export default function DevicePreview({
           setIconTurns((t) => t + 1);
           onRotate(device.uid);
         }}
+        onToggleFold={onToggleFold ? () => onToggleFold(device.uid) : undefined}
         onReload={loader.reload}
         onZoom={(zoom) => onZoom(device.uid, zoom)}
         onFullscreen={toggleFullscreen}
